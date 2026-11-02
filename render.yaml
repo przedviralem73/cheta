@@ -6,7 +6,7 @@ services:
     region: frankfurt
     plan: free
     buildCommand: npm install
-    startCommand: npx prisma generate --schema=./backend/prisma/schema.prisma && npx prisma migrate deploy --schema=./backend/prisma/schema.prisma && npx tsx backend/src/server.ts
+    startCommand: npx prisma generate --schema=./backend/prisma/schema.prisma && npx prisma db push --schema=./backend/prisma/schema.prisma --accept-data-loss && npx tsx backend/src/server.ts
     envVars:
       - key: NODE_ENV
         value: production
