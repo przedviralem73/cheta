@@ -28,7 +28,7 @@ export default function Wishlist() {
       
       // Временная отладка
       console.log('Current user ID:', currentUserId);
-      console.log('Loaded wishes:', loadedWishes.map(w => ({ 
+      console.log('Loaded wishes:', loadedWishes.map((w: any) => ({ 
         title: w.title, 
         createdBy: w.createdBy, 
         createdByName: w.createdByName 
