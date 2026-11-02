@@ -5,8 +5,8 @@ services:
     env: node
     region: frankfurt
     plan: free
-    buildCommand: npm install && npx prisma generate --schema=./backend/prisma/schema.prisma
-    startCommand: npm run dev:backend
+    buildCommand: npm install && npm run build:backend
+    startCommand: npm run start:backend
     envVars:
       - key: NODE_ENV
         value: production

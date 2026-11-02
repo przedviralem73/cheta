@@ -37,3 +37,6 @@ backend/prisma/dev.db-journal
 
 # Prisma
 backend/prisma/migrations
+
+# Compiled backend
+backend/dist
