@@ -51,6 +51,16 @@ export default function Wishlist() {
       const wishCreatorId = Number(wish.createdBy);
       const userId = Number(currentUserId);
       
+      // Отладка
+      console.log('Filter check:', {
+        ownerFilter,
+        wishTitle: wish.title,
+        wishCreatorId,
+        userId,
+        isEqual: wishCreatorId === userId,
+        shouldShow: ownerFilter === 'mine' ? wishCreatorId === userId : wishCreatorId !== userId
+      });
+      
       if (ownerFilter === 'mine') return wishCreatorId === userId;
       if (ownerFilter === 'partner') return wishCreatorId !== userId;
       return true;
