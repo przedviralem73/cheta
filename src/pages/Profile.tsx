@@ -100,7 +100,7 @@ export default function Profile() {
       {/* Пара */}
       {couple && (
         <div className="bg-black border border-gray-700 rounded-lg p-6 mb-4">
-          <h2 className="font-semibold text-lg text-white mb-4">💑 Ваша пара</h2>
+          <h2 className="font-semibold text-lg text-white mb-4">Ваша пара</h2>
           
           {/* Аватарки пары */}
           <div className="flex items-center justify-center mb-6 relative">
@@ -149,7 +149,7 @@ export default function Profile() {
               </span>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-95 rounded-lg pointer-events-none">
                 <span className="text-sm text-white font-medium">
-                  {copied ? '✓ Скопировано!' : '📋 Нажми чтобы скопировать'}
+                  {copied ? 'Скопировано!' : 'Нажми чтобы скопировать'}
                 </span>
               </div>
             </button>
