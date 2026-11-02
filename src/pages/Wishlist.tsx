@@ -24,7 +24,17 @@ export default function Wishlist() {
     setIsLoading(true);
     try {
       const response = await wishlistAPI.getAll(couple.id, activeTab);
-      setWishes(response.data.wishes);
+      const loadedWishes = response.data.wishes;
+      
+      // Временная отладка
+      console.log('Current user ID:', currentUserId);
+      console.log('Loaded wishes:', loadedWishes.map(w => ({ 
+        title: w.title, 
+        createdBy: w.createdBy, 
+        createdByName: w.createdByName 
+      })));
+      
+      setWishes(loadedWishes);
     } catch (error) {
       console.error('Error loading wishes:', error);
     } finally {
@@ -36,8 +46,13 @@ export default function Wishlist() {
     .filter((wish) => wish.status === activeTab)
     .filter((wish) => {
       if (ownerFilter === 'all') return true;
-      if (ownerFilter === 'mine') return wish.createdBy === currentUserId;
-      if (ownerFilter === 'partner') return wish.createdBy !== currentUserId;
+      
+      // Приводим оба значения к числу для надежного сравнения
+      const wishCreatorId = Number(wish.createdBy);
+      const userId = Number(currentUserId);
+      
+      if (ownerFilter === 'mine') return wishCreatorId === userId;
+      if (ownerFilter === 'partner') return wishCreatorId !== userId;
       return true;
     });
 
