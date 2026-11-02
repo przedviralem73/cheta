@@ -20,7 +20,6 @@ services:
   - type: web
     name: bot-lummic-frontend
     env: static
-    region: frankfurt
     plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
