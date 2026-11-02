@@ -1,5 +1,4 @@
 services:
-services:
   # Backend API
   - type: web
     name: bot-lummic-backend
