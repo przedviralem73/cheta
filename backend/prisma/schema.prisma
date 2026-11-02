@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Couple {
+  id         String   @id @default(uuid())
+  inviteCode String   @unique
+  createdAt  DateTime @default(now())
+  
+  user1Id    BigInt
+  user1Name  String
+  user2Id    BigInt?
+  user2Name  String?
+  
+  wishes     Wish[]
+}
+
+model Wish {
+  id          String   @id @default(uuid())
+  title       String
+  imageUrl    String
+  link        String
+  price       String?
+  status      String   @default("wanted") // "wanted" | "bought"
+  createdBy   BigInt
+  createdByName String
+  boughtBy    BigInt?
+  boughtByName  String?
+  boughtAt    DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  coupleId    String
+  couple      Couple   @relation(fields: [coupleId], references: [id], onDelete: Cascade)
+  
+  @@index([coupleId])
+  @@index([status])
+}

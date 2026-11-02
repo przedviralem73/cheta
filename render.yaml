@@ -1,0 +1,33 @@
+services:
+  # Backend API
+  - type: web
+    name: bot-lummic-backend
+    env: node
+    region: frankfurt
+    plan: free
+    buildCommand: npm install && npx prisma generate --schema=./backend/prisma/schema.prisma
+    startCommand: npm run dev:backend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_URL
+        value: file:./backend/prisma/dev.db
+    healthCheckPath: /health
+
+  # Frontend Static Site
+  - type: web
+    name: bot-lummic-frontend
+    env: static
+    region: frankfurt
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+    envVars:
+      - key: VITE_API_URL
+        sync: false
