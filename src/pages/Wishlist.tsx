@@ -3,12 +3,16 @@ import { useStore } from '../store/useStore';
 import { wishlistAPI } from '../services/api';
 import WishCard from '../components/WishCard';
 import AddWishModal from '../components/AddWishModal';
+import WebApp from '@twa-dev/sdk';
 
 export default function Wishlist() {
   const { couple, wishes, setWishes } = useStore();
   const [activeTab, setActiveTab] = useState<'wanted' | 'bought'>('wanted');
+  const [ownerFilter, setOwnerFilter] = useState<'all' | 'mine' | 'partner'>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const currentUserId = WebApp.initDataUnsafe.user?.id;
 
   useEffect(() => {
     loadWishes();
@@ -28,7 +32,14 @@ export default function Wishlist() {
     }
   };
 
-  const filteredWishes = wishes.filter((wish) => wish.status === activeTab);
+  const filteredWishes = wishes
+    .filter((wish) => wish.status === activeTab)
+    .filter((wish) => {
+      if (ownerFilter === 'all') return true;
+      if (ownerFilter === 'mine') return wish.createdBy === currentUserId;
+      if (ownerFilter === 'partner') return wish.createdBy !== currentUserId;
+      return true;
+    });
 
   if (!couple) {
     return (
@@ -45,7 +56,7 @@ export default function Wishlist() {
         <div className="px-4 py-3">
           <h1 className="text-2xl font-bold text-white mb-3">Вишлист</h1>
           
-          {/* Tabs */}
+          {/* Status Tabs (Хочу / Куплено) */}
           <div className="flex gap-2 mb-3">
             <button
               onClick={() => setActiveTab('wanted')}
@@ -66,6 +77,40 @@ export default function Wishlist() {
               }`}
             >
               Куплено
+            </button>
+          </div>
+
+          {/* Owner Filter Tabs */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setOwnerFilter('all')}
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                ownerFilter === 'all'
+                  ? 'bg-gray-800 text-white'
+                  : 'bg-black text-gray-600'
+              }`}
+            >
+              Все
+            </button>
+            <button
+              onClick={() => setOwnerFilter('mine')}
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                ownerFilter === 'mine'
+                  ? 'bg-gray-800 text-white'
+                  : 'bg-black text-gray-600'
+              }`}
+            >
+              Мои
+            </button>
+            <button
+              onClick={() => setOwnerFilter('partner')}
+              className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                ownerFilter === 'partner'
+                  ? 'bg-gray-800 text-white'
+                  : 'bg-black text-gray-600'
+              }`}
+            >
+              Половинки
             </button>
           </div>
         </div>
