@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface User {
   id: number;
@@ -45,21 +46,32 @@ interface AppState {
   setLoading: (loading: boolean) => void;
 }
 
-export const useStore = create<AppState>((set) => ({
-  user: null,
-  couple: null,
-  wishes: [],
-  isLoading: false,
+export const useStore = create<AppState>()(
+  persist(
+    (set) => ({
+      user: null,
+      couple: null,
+      wishes: [],
+      isLoading: false,
 
-  setUser: (user) => set({ user }),
-  setCouple: (couple) => set({ couple }),
-  setWishes: (wishes) => set({ wishes }),
-  addWish: (wish) => set((state) => ({ wishes: [wish, ...state.wishes] })),
-  updateWish: (wishId, updates) =>
-    set((state) => ({
-      wishes: state.wishes.map((w) => (w.id === wishId ? { ...w, ...updates } : w)),
-    })),
-  removeWish: (wishId) =>
-    set((state) => ({ wishes: state.wishes.filter((w) => w.id !== wishId) })),
-  setLoading: (loading) => set({ isLoading: loading }),
-}));
+      setUser: (user) => set({ user }),
+      setCouple: (couple) => set({ couple }),
+      setWishes: (wishes) => set({ wishes }),
+      addWish: (wish) => set((state) => ({ wishes: [wish, ...state.wishes] })),
+      updateWish: (wishId, updates) =>
+        set((state) => ({
+          wishes: state.wishes.map((w) => (w.id === wishId ? { ...w, ...updates } : w)),
+        })),
+      removeWish: (wishId) =>
+        set((state) => ({ wishes: state.wishes.filter((w) => w.id !== wishId) })),
+      setLoading: (loading) => set({ isLoading: loading }),
+    }),
+    {
+      name: 'couple-wishlist-storage',
+      partialize: (state) => ({
+        couple: state.couple,
+        user: state.user,
+      }),
+    }
+  )
+);

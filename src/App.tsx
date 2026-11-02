@@ -41,7 +41,7 @@ function App() {
       };
       setUser(telegramUser);
       
-      // Проверяем, есть ли у пользователя пара
+      // Всегда перезагружаем данные пары при запуске для актуальности
       loadCouple(telegramUser.id);
     } else {
       // Для локальной разработки
@@ -50,7 +50,13 @@ function App() {
         firstName: 'Тестовый пользователь',
       };
       setUser(mockUser);
-      setIsLoading(false);
+      
+      // Если есть сохраненная пара - используем её для локальной разработки
+      if (couple) {
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+      }
     }
   }, []);
 
